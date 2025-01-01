@@ -3,7 +3,7 @@ import { useState } from 'react';
 const PredictionForm = () => {
   const [formData, setFormData] = useState({
     age: '',
- daysPresence: '',
+    daysPresence: '',
     daysAbsence: '',
     attendancePercentage: '',
     englishBook: '',
@@ -17,14 +17,17 @@ const PredictionForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+ setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
+    setPrediction(null);
+
     try {
-      const response = await fetch('https://tcpi-predict-backend.vercel.app/', {
+      const response = await fetch('https://students-prediction-backend.onrender.com/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,12 +38,11 @@ const PredictionForm = () => {
       const data = await response.json();
       if (response.ok) {
         setPrediction(data.prediction);
-        setError(null);
       } else {
-        setError(data.error);
+        setError(data.error || 'Failed to get prediction');
       }
     } catch (err) {
-      setError('Failed to get prediction');
+      setError('Failed to connect to the server');
     } finally {
       setIsLoading(false);
     }
