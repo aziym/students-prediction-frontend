@@ -42,7 +42,7 @@ const PredictionForm = () => {
     setPrediction(null);
 
     try {
-      const response = await fetch('https://students-prediction-backend.onrender.com/predict', {
+      const response = await fetch('https://students-prediction-backend.onrender.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
