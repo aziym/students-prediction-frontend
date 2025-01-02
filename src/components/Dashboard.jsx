@@ -39,133 +39,97 @@ const FloatingCard = ({ children, delay = "0s" }) => {
 const DashboardLayout = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const navLinks = [
     { path: '/', label: 'General Information', icon: <GraduationCap className="w-5 h-5" /> },
     { path: '/prediction', label: 'Student Prediction Model', icon: <BarChart2 className="w-5 h-5" /> },
-    { path: '/results', label: 'Predicted Results 2023 (Past)', icon: <ClipboardList className="w-5 h-5" /> },
-    { path: '/predictions-2024', label: 'Predicted Result 2024 (Current)', icon: <TrendingUp className="w-5 h-5" /> },
+    { path: '/results', label: 'Predicted Results 2023', icon: <ClipboardList className="w-5 h-5" /> },
+    { path: '/predictions-2024', label: 'Predicted Result 2024', icon: <TrendingUp className="w-5 h-5" /> },
     { path: '/actions', label: 'Suggested Actions', icon: <ClipboardList className="w-5 h-5" /> },
   ];
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'}`}>
-      {/* Top Navigation Bar */}
-      <div className={`fixed top-0 right-0 left-0 md:left-72 z-10 ${isDarkMode ? 'bg-gray-800/70' : 'bg-white/70'} backdrop-blur-lg border-b border-gray-700/50`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'}`}>
+      {/* Mobile Header - Always visible on mobile */}
+      <header className={`fixed top-0 left-0 right-0 z-20 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} md:hidden`}>
         <div className="px-4 h-16 flex items-center justify-between">
-          {/* Search Bar */}
-          <div className="hidden md:flex items-center flex-1 max-w-xl">
-          
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <GraduationCap className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              TCPIPredict
+            </span>
           </div>
-
-          {/* Right Side Icons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               className="p-2 rounded-lg hover:bg-gray-700/50"
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-lg hover:bg-gray-700/50"
+            >
+              {isMobileMenuOpen ? 
+                <span className="text-xl">✕</span> : 
+                <span className="text-xl">☰</span>
+              }
+            </button>
           </div>
         </div>
+      </header>
+
+      {/* Mobile Navigation Menu - Slides in from top */}
+      <div className={`fixed inset-x-0 top-16 z-10 transform transition-transform duration-300 ease-in-out md:hidden ${
+        isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+      }`}>
+        <nav className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center px-4 py-3 text-sm font-medium ${
+                  isActive
+                    ? isDarkMode 
+                      ? 'bg-gray-700 text-blue-400'
+                      : 'bg-blue-50 text-blue-600'
+                    : isDarkMode
+                      ? 'text-gray-300 hover:bg-gray-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                }`
+              }
+            >
+              <span className="mr-3">{link.icon}</span>
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
       </div>
 
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <div className="hidden md:flex md:w-72 md:flex-col md:fixed md:inset-y-0">
-        <div className={`flex flex-col flex-grow pt-5 pb-4 overflow-y-auto transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          {/* Logo Section */}
-          <div className="flex items-center justify-center px-6 mb-8">
+        <div className={`flex flex-col flex-grow overflow-y-auto ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className="flex items-center justify-center px-6 h-16">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
                 <GraduationCap className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-               TCPIPredict
+                TCPIPredict
               </span>
             </div>
           </div>
-
-          {/* Navigation Links */}
-          <div className="flex-grow flex flex-col px-4">
-            <nav className="flex-1 space-y-2">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.path}
-                  to={link.path}
-                  className={({ isActive }) =>
-                    `group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 ${
-                      isActive
-                        ? isDarkMode 
-                          ? 'bg-gray-700 text-blue-400 shadow-lg shadow-blue-500/20'
-                          : 'bg-blue-50 text-blue-600 shadow-lg shadow-blue-500/20'
-                        : isDarkMode
-                          ? 'text-gray-300 hover:bg-gray-700'
-                          : 'text-gray-600 hover:bg-gray-50'
-                    }`
-                  }
-                >
-                  <span className="mr-3">{link.icon}</span>
-                  {link.label}
-                </NavLink>
-              ))}
-            </nav>
-
-            {/* User Profile Section */}
-            <div className="mt-auto pb-4">
-              <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-medium">Created by : Azim Bakri</h2>
-                    <p className="text-xs text-gray-400">Universiti Malaysia Pahang Al-Sultan Abdullah (UMPSA)</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Header */}
-      <div className="md:hidden">
-        <div className={`px-4 py-3 flex items-center justify-between transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              EduPredict
-            </span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className={`p-2 rounded-lg transition-colors duration-300 ${
-                isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
-              }`}
-            >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-lg hover:bg-gray-700"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-          </div>
-        </div>
-        {isMobileMenuOpen && (
-          <nav className={`px-4 py-2 space-y-1 transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <nav className="flex-1 px-4 pb-4 space-y-1">
             {navLinks.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
-                onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) =>
-                  `block px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 ${
+                  `flex items-center px-4 py-3 text-sm font-medium rounded-xl ${
                     isActive
                       ? isDarkMode 
                         ? 'bg-gray-700 text-blue-400'
@@ -176,18 +140,20 @@ const DashboardLayout = ({ children }) => {
                   }`
                 }
               >
-                <span className="mr-3 inline-block align-middle">{link.icon}</span>
+                <span className="mr-3">{link.icon}</span>
                 {link.label}
               </NavLink>
             ))}
           </nav>
-        )}
+        </div>
       </div>
 
-      {/* Main content */}
-      <div className="md:pl-72 pt-16">
-        <main className="py-8 px-4 sm:px-6 md:px-8">
-          {children}
+      {/* Main Content */}
+      <div className="md:pl-72">
+        <main className="pt-16 min-h-screen">
+          <div className="px-4 py-6 sm:px-6 lg:px-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>
