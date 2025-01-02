@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { ChartBar, Loader2, BookOpen, Brain, School, Calculator } from 'lucide-react';
+import { ChartBar, Loader2, Brain, School, Calculator } from 'lucide-react';
 
-// Floating Card Component
 const FloatingCard = ({ children, delay = "0s" }) => {
   return (
     <div 
@@ -32,17 +31,30 @@ const PredictionForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.value;
+    if (value === '' || (!isNaN(value) && parseFloat(value) >= 0)) {
+      setFormData({ ...formData, [e.target.name]: value });
+    }
+  };
+
+  const validateForm = () => {
+    const values = Object.values(formData);
+    return values.every(value => value !== '' && !isNaN(value) && parseFloat(value) >= 0);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      setError('Please fill all fields with valid positive numbers');
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setPrediction(null);
 
     try {
-      const response = await fetch('https://students-prediction-backend.onrender.com', {
+      const response = await fetch('https://students-prediction-backend.onrender.com/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,37 +62,38 @@ const PredictionForm = () => {
         body: JSON.stringify(formData),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
-      if (response.ok) {
-        setPrediction(data.prediction);
+      if (data.prediction !== undefined) {
+        setPrediction(`Predicted Performance Score: ${data.prediction.toFixed(2)}`);
       } else {
-        setError(data.error || 'Failed to get prediction');
+        throw new Error('Invalid response format');
       }
     } catch (err) {
-      setError('Failed to connect to the server');
+      setError(
+        err.message === 'Failed to fetch' 
+          ? 'Unable to connect to the prediction server. Please try again later.' 
+          : `Prediction failed: ${err.message}`
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Keyframes for floating animation
-  const floatingKeyframes = `
-    @keyframes float {
-      0% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-20px);
-      }
-      100% {
-        transform: translateY(0px);
-      }
-    }
-  `;
-
   return (
     <div className="min-h-screen bg-gray-900 p-8">
-      <style>{floatingKeyframes}</style>
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+          }
+        `}
+      </style>
       
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent text-center">
@@ -94,7 +107,7 @@ const PredictionForm = () => {
               <h3 className="text-xl font-semibold text-blue-400">Performance Analysis Tool</h3>
             </div>
             <p className="text-gray-300 mb-4">
-              Enter student information below to predict academic performance. This tool uses machine learning to analyze various factors and provide insights.
+              Enter student information below to predict academic performance. All fields must be filled with valid positive numbers.
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <School className="w-4 h-4" />
@@ -107,106 +120,52 @@ const PredictionForm = () => {
           <div className="bg-gray-800/50 backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-blue-500/70">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Student Details Section */}
                 <div className="space-y-4">
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">Age</span>
-                    <input
-                      type="number"
-                      name="age"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter age"
-                    />
-                  </label>
-                  
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">Days Present</span>
-                    <input
-                      type="number"
-                      name="daysPresence"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter days present"
-                    />
-                  </label>
-                  
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">Days Absent</span>
-                    <input
-                      type="number"
-                      name="daysAbsence"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter days absent"
-                    />
-                  </label>
-                  
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">Attendance Percentage</span>
-                    <input
-                      type="number"
-                      name="attendancePercentage"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter attendance percentage"
-                    />
-                  </label>
+                  {[
+                    { name: 'age', label: 'Age' },
+                    { name: 'daysPresence', label: 'Days Present' },
+                    { name: 'daysAbsence', label: 'Days Absent' },
+                    { name: 'attendancePercentage', label: 'Attendance Percentage' }
+                  ].map(field => (
+                    <label key={field.name} className="block">
+                      <span className="text-blue-400 mb-1 block">{field.label}</span>
+                      <input
+                        type="number"
+                        name={field.name}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        min="0"
+                        step="any"
+                        required
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
+                        placeholder={`Enter ${field.label.toLowerCase()}`}
+                      />
+                    </label>
+                  ))}
                 </div>
 
-                {/* Academic Performance Section */}
                 <div className="space-y-4">
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">English Book Score</span>
-                    <input
-                      type="number"
-                      name="englishBook"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter English score"
-                    />
-                  </label>
-                  
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">Bahasa Melayu Book Score</span>
-                    <input
-                      type="number"
-                      name="bahasaMelayuBook"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter Bahasa Melayu score"
-                    />
-                  </label>
-                  
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">Math Test Mark</span>
-                    <input
-                      type="number"
-                      name="mathTestMark"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter math mark"
-                    />
-                  </label>
-                  
-                  <label className="block">
-                    <span className="text-blue-400 mb-1 block">Math Test Percentage</span>
-                    <input
-                      type="number"
-                      name="mathTestMarkPercentage"
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                      placeholder="Enter math percentage"
-                    />
-                  </label>
+                  {[
+                    { name: 'englishBook', label: 'English Book Score' },
+                    { name: 'bahasaMelayuBook', label: 'Bahasa Melayu Book Score' },
+                    { name: 'mathTestMark', label: 'Math Test Mark' },
+                    { name: 'mathTestMarkPercentage', label: 'Math Test Percentage' }
+                  ].map(field => (
+                    <label key={field.name} className="block">
+                      <span className="text-blue-400 mb-1 block">{field.label}</span>
+                      <input
+                        type="number"
+                        name={field.name}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        min="0"
+                        step="any"
+                        required
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
+                        placeholder={`Enter ${field.label.toLowerCase()}`}
+                      />
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -242,7 +201,6 @@ const PredictionForm = () => {
             {error && (
               <div className="mt-6 bg-red-400/10 border border-red-400/20 rounded-lg p-4">
                 <div className="flex items-center space-x-2 text-red-400">
-                  <AlertTriangle className="w-5 h-5" />
                   <span className="font-semibold">Error</span>
                 </div>
                 <p className="text-gray-300 mt-2">{error}</p>
