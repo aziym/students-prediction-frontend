@@ -97,7 +97,7 @@ const PredictionForm = () => {
       
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent text-center">
-          Student Performance Prediction System
+          Student Performance Prediction Model
         </h2>
 
         <FloatingCard delay="0s">
@@ -146,8 +146,8 @@ const PredictionForm = () => {
 
                 <div className="space-y-4">
                   {[
-                    { name: 'englishBook', label: 'English Book Score' },
-                    { name: 'bahasaMelayuBook', label: 'Bahasa Melayu Book Score' },
+                    { name: 'englishBook', label: 'English Book Level' },
+                    { name: 'bahasaMelayuBook', label: 'Bahasa Melayu Book Level' },
                     { name: 'mathTestMark', label: 'Math Test Mark' },
                     { name: 'mathTestMarkPercentage', label: 'Math Test Percentage' }
                   ].map(field => (
