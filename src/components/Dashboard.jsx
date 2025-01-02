@@ -50,7 +50,19 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'}`}>
-      {/* Mobile Header - Always visible on mobile */}
+      {/* Desktop Top Bar */}
+      <div className="hidden md:block fixed top-0 right-0 left-72 z-20">
+        <div className={`h-16 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} px-6 flex items-center justify-end`}>
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="p-2 rounded-lg hover:bg-gray-700/50"
+          >
+            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Header */}
       <header className={`fixed top-0 left-0 right-0 z-20 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} md:hidden`}>
         <div className="px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -81,7 +93,7 @@ const DashboardLayout = ({ children }) => {
         </div>
       </header>
 
-      {/* Mobile Navigation Menu - Slides in from top */}
+      {/* Mobile Navigation Menu */}
       <div className={`fixed inset-x-0 top-16 z-10 transform transition-transform duration-300 ease-in-out md:hidden ${
         isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
       }`}>
