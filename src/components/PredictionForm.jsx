@@ -3,7 +3,7 @@ import { ChartBar, Loader2, Brain, School, Calculator } from 'lucide-react';
 
 const FloatingCard = ({ children, delay = "0s", className = "" }) => (
   <div 
-    className={`transition-colors duration-200 ${className}`}
+    className={`${className}`}
     style={{ animation: `float 8s ease-in-out infinite`, animationDelay: delay }}
   >
     {children}
@@ -58,22 +58,28 @@ const PredictionForm = ({ isDarkMode }) => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       
       const data = await response.json();
-      if (data.prediction !== undefined) {
-        setPrediction(`Predicted Performance Score: ${data.prediction.toFixed(2)}`);
-      } else {
-        throw new Error('Invalid response format');
-      }
+      setPrediction(data.prediction !== undefined ? 
+        `Predicted Performance Score: ${data.prediction.toFixed(2)}` : 
+        null);
     } catch (err) {
-      setError(err.message === 'Failed to fetch' 
-        ? 'Unable to connect to the prediction server. Please try again later.' 
-        : `Prediction failed: ${err.message}`);
+      setError(err.message === 'Failed to fetch' ? 
+        'Unable to connect to prediction server' : 
+        `Prediction failed: ${err.message}`);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const cardClassName = isDarkMode ? 
+    'bg-gray-800 shadow-lg border border-gray-700' :
+    'bg-white shadow-lg border border-gray-200';
+
+  const inputClassName = isDarkMode ?
+    'bg-gray-700 border-gray-600 text-gray-200' :
+    'bg-white border-gray-300 text-gray-900';
+
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} p-8 transition-colors duration-200`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} p-8`}>
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
@@ -87,15 +93,10 @@ const PredictionForm = ({ isDarkMode }) => {
           Student Performance Prediction Model
         </h2>
 
-        <FloatingCard 
-          delay="0s" 
-          className={`${isDarkMode ? 'bg-gray-800/95' : 'bg-white'} backdrop-blur-xl shadow-xl rounded-2xl p-6 border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} mb-8`}
-        >
+        <FloatingCard delay="0s" className={`${cardClassName} rounded-2xl p-6 mb-8`}>
           <div className="flex items-center space-x-4 mb-6">
-            <Brain className={`w-6 h-6 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`} />
-            <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`}>
-              Performance Analysis Tool
-            </h3>
+            <Brain className="w-6 h-6 text-blue-400" />
+            <h3 className="text-xl font-semibold text-blue-400">Performance Analysis Tool</h3>
           </div>
           <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
             Enter student information below to predict academic performance. All fields must be filled with valid positive numbers.
@@ -106,10 +107,7 @@ const PredictionForm = ({ isDarkMode }) => {
           </div>
         </FloatingCard>
 
-        <FloatingCard 
-          delay="0.5s" 
-          className={`${isDarkMode ? 'bg-gray-800/95' : 'bg-white'} backdrop-blur-xl shadow-xl rounded-2xl p-6 border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
-        >
+        <FloatingCard delay="0.5s" className={`${cardClassName} rounded-2xl p-6`}>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[['age', 'daysPresence', 'daysAbsence', 'attendancePercentage'], 
@@ -118,7 +116,7 @@ const PredictionForm = ({ isDarkMode }) => {
                 <div key={colIndex} className="space-y-4">
                   {column.map(field => (
                     <label key={field} className="block">
-                      <span className={`${isDarkMode ? 'text-gray-300' : 'text-blue-500'} mb-1 block`}>
+                      <span className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-1 block`}>
                         {field.split(/(?=[A-Z])/).join(' ').replace(/\b\w/g, c => c.toUpperCase())}
                       </span>
                       <input
@@ -129,11 +127,7 @@ const PredictionForm = ({ isDarkMode }) => {
                         min="0"
                         step="any"
                         required
-                        className={`w-full ${
-                          isDarkMode 
-                            ? 'bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500' 
-                            : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-400'
-                        } border rounded-lg p-2 focus:outline-none focus:border-blue-400 transition-colors`}
+                        className={`w-full ${inputClassName} rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none`}
                         placeholder={`Enter ${field.split(/(?=[A-Z])/).join(' ').toLowerCase()}`}
                       />
                     </label>
@@ -145,7 +139,7 @@ const PredictionForm = ({ isDarkMode }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg p-3 font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center space-x-2"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg p-3 font-semibold hover:opacity-90 disabled:opacity-50 flex items-center justify-center space-x-2"
             >
               {isLoading ? (
                 <>
