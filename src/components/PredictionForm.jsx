@@ -1,20 +1,13 @@
 import { useState } from 'react';
 import { ChartBar, Loader2, Brain, School, Calculator } from 'lucide-react';
 
-const FloatingCard = ({ children, delay = "0s" }) => {
-  return (
-    <div 
-      style={{
-        animation: `float 8s ease-in-out infinite`,
-        animationDelay: delay
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+const FloatingCard = ({ children, delay = "0s" }) => (
+  <div style={{ animation: `float 8s ease-in-out infinite`, animationDelay: delay }}>
+    {children}
+  </div>
+);
 
-const PredictionForm = () => {
+const PredictionForm = ({ isDarkMode }) => {
   const [formData, setFormData] = useState({
     age: '',
     daysPresence: '',
@@ -25,7 +18,6 @@ const PredictionForm = () => {
     mathTestMark: '',
     mathTestMarkPercentage: ''
   });
-
   const [prediction, setPrediction] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,16 +48,12 @@ const PredictionForm = () => {
     try {
       const response = await fetch('https://students-prediction-backend.onrender.com/predict', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      
       const data = await response.json();
       if (data.prediction !== undefined) {
         setPrediction(`Predicted Performance Score: ${data.prediction.toFixed(2)}`);
@@ -73,27 +61,23 @@ const PredictionForm = () => {
         throw new Error('Invalid response format');
       }
     } catch (err) {
-      setError(
-        err.message === 'Failed to fetch' 
-          ? 'Unable to connect to the prediction server. Please try again later.' 
-          : `Prediction failed: ${err.message}`
-      );
+      setError(err.message === 'Failed to fetch' 
+        ? 'Unable to connect to the prediction server. Please try again later.' 
+        : `Prediction failed: ${err.message}`);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-8">
-      <style>
-        {`
-          @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-          }
-        `}
-      </style>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} p-8`}>
+      <style>{`
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+          100% { transform: translateY(0px); }
+        }
+      `}</style>
       
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent text-center">
@@ -101,15 +85,15 @@ const PredictionForm = () => {
         </h2>
 
         <FloatingCard delay="0s">
-          <div className="bg-gray-800/50 backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-gray-700/50 mb-8">
+          <div className={`${isDarkMode ? 'bg-gray-800/50' : 'bg-white'} backdrop-blur-xl shadow-xl rounded-2xl p-6 border ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'} mb-8`}>
             <div className="flex items-center space-x-4 mb-6">
               <Brain className="w-6 h-6 text-blue-400" />
               <h3 className="text-xl font-semibold text-blue-400">Performance Analysis Tool</h3>
             </div>
-            <p className="text-gray-300 mb-4">
+            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
               Enter student information below to predict academic performance. All fields must be filled with valid positive numbers.
             </p>
-            <div className="flex items-center space-x-2 text-sm text-gray-400">
+            <div className={`flex items-center space-x-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               <School className="w-4 h-4" />
               <span>Powered by advanced educational metrics</span>
             </div>
@@ -117,56 +101,37 @@ const PredictionForm = () => {
         </FloatingCard>
 
         <FloatingCard delay="0.5s">
-          <div className="bg-gray-800/50 backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-blue-500/70">
+          <div className={`${isDarkMode ? 'bg-gray-800/50' : 'bg-white'} backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-blue-500/70`}>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  {[
-                    { name: 'age', label: 'Age' },
-                    { name: 'daysPresence', label: 'Days Present' },
-                    { name: 'daysAbsence', label: 'Days Absent' },
-                    { name: 'attendancePercentage', label: 'Attendance Percentage' }
-                  ].map(field => (
-                    <label key={field.name} className="block">
-                      <span className="text-blue-400 mb-1 block">{field.label}</span>
-                      <input
-                        type="number"
-                        name={field.name}
-                        value={formData[field.name]}
-                        onChange={handleChange}
-                        min="0"
-                        step="any"
-                        required
-                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                        placeholder={`Enter ${field.label.toLowerCase()}`}
-                      />
-                    </label>
-                  ))}
-                </div>
-
-                <div className="space-y-4">
-                  {[
-                    { name: 'englishBook', label: 'English Book Score' },
-                    { name: 'bahasaMelayuBook', label: 'Bahasa Melayu Book Score' },
-                    { name: 'mathTestMark', label: 'Math Test Mark' },
-                    { name: 'mathTestMarkPercentage', label: 'Math Test Percentage' }
-                  ].map(field => (
-                    <label key={field.name} className="block">
-                      <span className="text-blue-400 mb-1 block">{field.label}</span>
-                      <input
-                        type="number"
-                        name={field.name}
-                        value={formData[field.name]}
-                        onChange={handleChange}
-                        min="0"
-                        step="any"
-                        required
-                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-                        placeholder={`Enter ${field.label.toLowerCase()}`}
-                      />
-                    </label>
-                  ))}
-                </div>
+                {[['age', 'daysPresence', 'daysAbsence', 'attendancePercentage'], 
+                  ['englishBook', 'bahasaMelayuBook', 'mathTestMark', 'mathTestMarkPercentage']
+                ].map((column, colIndex) => (
+                  <div key={colIndex} className="space-y-4">
+                    {column.map(field => (
+                      <label key={field} className="block">
+                        <span className="text-blue-400 mb-1 block">
+                          {field.split(/(?=[A-Z])/).join(' ').replace(/\b\w/g, c => c.toUpperCase())}
+                        </span>
+                        <input
+                          type="number"
+                          name={field}
+                          value={formData[field]}
+                          onChange={handleChange}
+                          min="0"
+                          step="any"
+                          required
+                          className={`w-full ${
+                            isDarkMode 
+                              ? 'bg-gray-700/50 border-gray-600 text-gray-200' 
+                              : 'bg-gray-50 border-gray-300 text-gray-900'
+                          } border rounded-lg p-2 focus:outline-none focus:border-blue-400 transition-colors`}
+                          placeholder={`Enter ${field.split(/(?=[A-Z])/).join(' ').toLowerCase()}`}
+                        />
+                      </label>
+                    ))}
+                  </div>
+                ))}
               </div>
 
               <button
@@ -189,21 +154,21 @@ const PredictionForm = () => {
             </form>
 
             {prediction && (
-              <div className="mt-6 bg-green-400/10 border border-green-400/20 rounded-lg p-4">
+              <div className={`mt-6 ${isDarkMode ? 'bg-green-400/10 border-green-400/20' : 'bg-green-50 border-green-200'} border rounded-lg p-4`}>
                 <div className="flex items-center space-x-2 text-green-400">
                   <ChartBar className="w-5 h-5" />
                   <span className="font-semibold">Prediction Result</span>
                 </div>
-                <p className="text-gray-300 mt-2">{prediction}</p>
+                <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-2`}>{prediction}</p>
               </div>
             )}
 
             {error && (
-              <div className="mt-6 bg-red-400/10 border border-red-400/20 rounded-lg p-4">
+              <div className={`mt-6 ${isDarkMode ? 'bg-red-400/10 border-red-400/20' : 'bg-red-50 border-red-200'} border rounded-lg p-4`}>
                 <div className="flex items-center space-x-2 text-red-400">
                   <span className="font-semibold">Error</span>
                 </div>
-                <p className="text-gray-300 mt-2">{error}</p>
+                <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-2`}>{error}</p>
               </div>
             )}
           </div>
