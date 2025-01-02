@@ -146,8 +146,8 @@ const PredictionForm = () => {
 
                 <div className="space-y-4">
                   {[
-                    { name: 'englishBook', label: 'English Book Level' },
-                    { name: 'bahasaMelayuBook', label: 'Bahasa Melayu Book Level' },
+                    { name: 'englishBook', label: 'English Book Score' },
+                    { name: 'bahasaMelayuBook', label: 'Bahasa Melayu Book Score' },
                     { name: 'mathTestMark', label: 'Math Test Mark' },
                     { name: 'mathTestMarkPercentage', label: 'Math Test Percentage' }
                   ].map(field => (
