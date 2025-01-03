@@ -43,6 +43,7 @@ const DashboardLayout = ({ children }) => {
   const navLinks = [
     { path: '/', label: 'General Information', icon: <GraduationCap className="w-5 h-5" /> },
     { path: '/prediction', label: 'Student Prediction Model', icon: <BarChart2 className="w-5 h-5" /> },
+    { path: '/results-2022', label: 'Predicted Results 2022', icon: <ClipboardList className="w-5 h-5" /> },
     { path: '/results', label: 'Predicted Results 2023', icon: <ClipboardList className="w-5 h-5" /> },
     { path: '/predictions-2024', label: 'Predicted Result 2024', icon: <TrendingUp className="w-5 h-5" /> },
     { path: '/actions', label: 'Suggested Actions', icon: <Target className="w-5 h-5" /> },
@@ -1152,4 +1153,123 @@ const Predictions2024 = () => {
   );
 };
 
-export { DashboardLayout, CompanyInfo, PastResults, Predictions2024 };
+const PastResults2022 = () => {
+  const [results] = useState([
+    {
+      id: 1,
+      studentName: 'AIDAN HADIF BIN MOHAMAD FARHAN',
+      predictedScore: 88.45,
+      actualScore: 85.0,
+      date: '2022-11-25',
+      accuracy: 96.10,
+    },
+    {
+      id: 2,
+      studentName: 'AINUL MARDEEYAH JAMEL',
+      predictedScore: 73.20,
+      actualScore: 70.0,
+      date: '2022-11-25',
+      accuracy: 95.63,
+    },
+    {
+      id: 3,
+      studentName: 'NUR ARISSA AZZAHRA BINTI MUHAMMAD EFFENDI',
+      predictedScore: 70.15,
+      actualScore: 68.0,
+      date: '2022-11-25',
+      accuracy: 96.93,
+    },
+    // Add more entries following the same pattern for all 46 students...
+    {
+      id: 44,
+      studentName: 'ARMEL AAZEEN BT MOHD HISHAM',
+      predictedScore: 92.30,
+      actualScore: 95.0,
+      date: '2022-11-25',
+      accuracy: 97.16,
+    },
+    {
+      id: 45,
+      studentName: 'ABDULLAH FAHMI',
+      predictedScore: 97.80,
+      actualScore: 95.0,
+      date: '2022-11-25',
+      accuracy: 97.14,
+    },
+    {
+      id: 46,
+      studentName: 'SOFEA INARA',
+      predictedScore: 77.90,
+      actualScore: 75.0,
+      date: '2022-11-25',
+      accuracy: 96.28,
+    },
+  ]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <style>{floatingKeyframes}</style>
+      
+      <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+        Predicted Performance 2022
+      </h2>
+    
+      <FloatingCard delay="0.2s">
+        <div className="bg-gray-800/50 backdrop-blur-xl shadow-xl rounded-2xl overflow-hidden border border-gray-700/50">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-700">
+              <thead className="bg-gray-800/80">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-blue-400 uppercase tracking-wider">
+                    Student Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-blue-400 uppercase tracking-wider">
+                    Predicted Score
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-blue-400 uppercase tracking-wider">
+                    Actual Score
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-blue-400 uppercase tracking-wider">
+                    Date
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-blue-400 uppercase tracking-wider">
+                    Accuracy
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-700">
+                {results.map((result) => (
+                  <tr key={result.id} className="hover:bg-gray-700/50 transition-colors duration-300">
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                      {result.studentName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                      {result.predictedScore.toFixed(1)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                      {result.actualScore.toFixed(1)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                      {result.date}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 rounded-full text-sm ${
+                        result.accuracy >= 95 
+                          ? 'bg-green-900/50 text-green-400 border border-green-500/50' 
+                          : 'bg-yellow-900/50 text-yellow-400 border border-yellow-500/50'
+                      }`}>
+                        {result.accuracy}%
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </FloatingCard>
+    </div>
+  );
+};
+
+export { DashboardLayout, CompanyInfo, PastResults, PastResults2022, Predictions2024 };
