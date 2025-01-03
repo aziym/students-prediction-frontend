@@ -164,11 +164,10 @@ const DashboardLayout = ({ children }) => {
       <div className="md:pl-72">
         <main className="pt-16 min-h-screen">
           <div className="px-4 py-6 sm:px-6 lg:px-8">
-              {React.cloneElement(children, { isDarkMode })}
+            {children}
           </div>
         </main>
       </div>
-
     </div>
   );
 };
