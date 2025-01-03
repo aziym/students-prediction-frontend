@@ -14,7 +14,7 @@ const FloatingCard = ({ children, delay = "0s" }) => {
   );
 };
 
-const PredictionForm = ({ isDarkMode }) => {
+const PredictionForm = () => {
   const [formData, setFormData] = useState({
     age: '',
     daysPresence: '',
@@ -84,7 +84,7 @@ const PredictionForm = ({ isDarkMode }) => {
   };
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} p-8`}>
+    <div className="min-h-screen bg-gray-900 p-8">
       <style>
         {`
           @keyframes float {
@@ -101,12 +101,12 @@ const PredictionForm = ({ isDarkMode }) => {
         </h2>
 
         <FloatingCard delay="0s">
-          <div className={`${isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'} backdrop-blur-xl shadow-xl rounded-2xl p-6 border ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'} mb-8`}>
+          <div className="bg-gray-800/50 backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-gray-700/50 mb-8">
             <div className="flex items-center space-x-4 mb-6">
               <Brain className="w-6 h-6 text-blue-400" />
               <h3 className="text-xl font-semibold text-blue-400">Performance Analysis Tool</h3>
             </div>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
+            <p className="text-gray-300 mb-4">
               Enter student information below to predict academic performance. All fields must be filled with valid positive numbers.
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -117,7 +117,7 @@ const PredictionForm = ({ isDarkMode }) => {
         </FloatingCard>
 
         <FloatingCard delay="0.5s">
-          <div className={`${isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'} backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-blue-500/70`}>
+          <div className="bg-gray-800/50 backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-blue-500/70">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
@@ -137,7 +137,7 @@ const PredictionForm = ({ isDarkMode }) => {
                         min="0"
                         step="any"
                         required
-                        className={`w-full ${isDarkMode ? 'bg-gray-700/50 border-gray-600 text-gray-200' : 'bg-gray-50 border-gray-300 text-gray-900'} border rounded-lg p-2 focus:outline-none focus:border-blue-400 transition-colors`}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
                         placeholder={`Enter ${field.label.toLowerCase()}`}
                       />
                     </label>
@@ -161,7 +161,7 @@ const PredictionForm = ({ isDarkMode }) => {
                         min="0"
                         step="any"
                         required
-                        className={`w-full ${isDarkMode ? 'bg-gray-700/50 border-gray-600 text-gray-200' : 'bg-gray-50 border-gray-300 text-gray-900'} border rounded-lg p-2 focus:outline-none focus:border-blue-400 transition-colors`}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
                         placeholder={`Enter ${field.label.toLowerCase()}`}
                       />
                     </label>
@@ -189,21 +189,21 @@ const PredictionForm = ({ isDarkMode }) => {
             </form>
 
             {prediction && (
-              <div className={`mt-6 ${isDarkMode ? 'bg-green-400/10 border-green-400/20' : 'bg-green-50 border-green-200'} border rounded-lg p-4`}>
+              <div className="mt-6 bg-green-400/10 border border-green-400/20 rounded-lg p-4">
                 <div className="flex items-center space-x-2 text-green-400">
                   <ChartBar className="w-5 h-5" />
                   <span className="font-semibold">Prediction Result</span>
                 </div>
-                <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-2`}>{prediction}</p>
+                <p className="text-gray-300 mt-2">{prediction}</p>
               </div>
             )}
 
             {error && (
-              <div className={`mt-6 ${isDarkMode ? 'bg-red-400/10 border-red-400/20' : 'bg-red-50 border-red-200'} border rounded-lg p-4`}>
+              <div className="mt-6 bg-red-400/10 border border-red-400/20 rounded-lg p-4">
                 <div className="flex items-center space-x-2 text-red-400">
                   <span className="font-semibold">Error</span>
                 </div>
-                <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-2`}>{error}</p>
+                <p className="text-gray-300 mt-2">{error}</p>
               </div>
             )}
           </div>
