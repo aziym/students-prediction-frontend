@@ -45,7 +45,7 @@ const DashboardLayout = ({ children }) => {
     { path: '/prediction', label: 'Student Prediction Model', icon: <BarChart2 className="w-5 h-5" /> },
     { path: '/results', label: 'Predicted Results 2023', icon: <ClipboardList className="w-5 h-5" /> },
     { path: '/predictions-2024', label: 'Predicted Result 2024', icon: <TrendingUp className="w-5 h-5" /> },
-    { path: '/actions', label: 'Suggested Actions', icon: <ClipboardList className="w-5 h-5" /> },
+    { path: '/actions', label: 'Suggested Actions', icon: <Target className="w-5 h-5" /> },
   ];
 
   return (
@@ -164,10 +164,11 @@ const DashboardLayout = ({ children }) => {
       <div className="md:pl-72">
         <main className="pt-16 min-h-screen">
           <div className="px-4 py-6 sm:px-6 lg:px-8">
-            {children}
+              {React.cloneElement(children, { isDarkMode })}
           </div>
         </main>
       </div>
+
     </div>
   );
 };
@@ -205,7 +206,7 @@ const CompanyInfo = () => {
           </div>
           
           <p className="text-gray-300 mb-8 leading-relaxed">
-            Our study focused on developing a machine learning model to predict student performance at Tadika Cahaya Permata Ibu. By analyzing historical student data, we aimed to identify key factors that impact academic success. The model provides educators with early insights into student performance, enabling them to offer timely support and personalize learning strategies.
+            Our study focused on developing a machine learning model to predict student performance at Tadika Cahaya Permata Ibu. By analyzing student data, we aimed to identify key factors that impact academic success. The model provides educators with early insights into student performance, enabling them to offer timely support and personalize learning strategies.
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
