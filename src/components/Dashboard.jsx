@@ -168,6 +168,16 @@ const DashboardLayout = ({ children }) => {
             {children}
           </div>
         </main>
+
+        {/* Footer with Copyright */}
+        <footer className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="mx-auto py-4 px-6">
+            <p className={`text-sm text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              © {new Date().getFullYear()} TCPIPredict. All rights reserved. Developed by Azim M Bakri
+            </p>
+          </div>
+        </footer>
+
       </div>
     </div>
   );
