@@ -51,14 +51,41 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'}`}>
-      {/* Desktop Top Bar */}
+
+       {/* Enhanced Desktop Top Bar */}
       <div className="hidden md:block fixed top-0 right-0 left-72 z-20">
-        <div className={`h-16 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} px-6 flex items-center justify-end`}>
+        <div className={`h-16 ${isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'} backdrop-blur-xl border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'} px-6 flex items-center justify-between`}>
+          {/* Left side with time */}
+          <div className="flex items-center space-x-2">
+            <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              {new Date().toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </div>
+          </div>
+
+          {/* Right side with theme toggle */}
           <button
             onClick={() => setIsDarkMode(!isDarkMode)}
-            className="p-2 rounded-lg hover:bg-gray-700/50"
+            className={`p-2 rounded-xl ${isDarkMode ? 'bg-gray-700/50 hover:bg-gray-600/50' : 'bg-gray-100 hover:bg-gray-200'} 
+              transition-all duration-300 ease-in-out transform hover:scale-105
+              flex items-center gap-2 backdrop-blur-xl
+              ${isDarkMode ? 'shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'shadow-lg'}`}
           >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {isDarkMode ? (
+              <>
+                <Sun className="w-5 h-5 text-amber-400" />
+                <span className="text-sm font-medium text-gray-300">Light</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-5 h-5 text-blue-600" />
+                <span className="text-sm font-medium text-gray-600">Dark</span>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -209,7 +236,7 @@ const DashboardLayout = ({ children }) => {
                   </div>
                 </div>
               </div>
-              
+
             </div>
           </div>
         </footer>
