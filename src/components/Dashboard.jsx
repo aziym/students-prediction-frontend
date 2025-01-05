@@ -209,26 +209,7 @@ const DashboardLayout = ({ children }) => {
                   </div>
                 </div>
               </div>
-
-              {/* Extra Info */}
-              <div className="mt-6 pt-6 border-t border-gray-700/50 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm">
-                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
-                  <Mail className="w-4 h-4" />
-                  Contact
-                </a>
-                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
-                  <LineChart className="w-4 h-4" />
-                  Documentation
-                </a>
-                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
-                  <Target className="w-4 h-4" />
-                  Updates
-                </a>
-                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
-                  <Sparkles className="w-4 h-4" />
-                  Features
-                </a>
-              </div>
+              
             </div>
           </div>
         </footer>
