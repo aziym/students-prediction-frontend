@@ -169,12 +169,67 @@ const DashboardLayout = ({ children }) => {
           </div>
         </main>
 
-        {/* Footer with Copyright */}
-        <footer className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-          <div className="mx-auto py-4 px-6">
-            <p className={`text-sm text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              © {new Date().getFullYear()} TCPIPredict. All rights reserved. Developed by Azim M Bakri
-            </p>
+        {/* Enhanced Footer with Copyright */}
+        <footer className={`relative ${isDarkMode ? 'bg-gray-800/50' : 'bg-white'} backdrop-blur-xl`}>
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 animate-pulse"></div>
+          </div>
+          
+          <div className="relative mx-auto py-8 px-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                {/* Logo and Copyright */}
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
+                    <GraduationCap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-lg bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                      TCPIPredict
+                    </div>
+                    <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      © {new Date().getFullYear()} All rights reserved
+                    </div>
+                  </div>
+                </div>
+
+                {/* Developer Info */}
+                <div className={`flex items-center gap-3 px-4 py-2 rounded-xl ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'} backdrop-blur-xl hover:shadow-lg transition-all duration-300`}>
+                  <div className="flex items-center gap-2">
+                    <Bot className={`w-5 h-5 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`} />
+                    <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      Developed with ❤️ by
+                    </span>
+                    <a 
+                      href="mailto:azim.bakri2002@gmail.com"
+                      className="text-sm font-semibold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hover:from-purple-400 hover:to-blue-500 transition-all duration-300"
+                    >
+                      Azim M Bakri
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Extra Info */}
+              <div className="mt-6 pt-6 border-t border-gray-700/50 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm">
+                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
+                  <Mail className="w-4 h-4" />
+                  Contact
+                </a>
+                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
+                  <LineChart className="w-4 h-4" />
+                  Documentation
+                </a>
+                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
+                  <Target className="w-4 h-4" />
+                  Updates
+                </a>
+                <a href="#" className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'} transition-colors duration-300`}>
+                  <Sparkles className="w-4 h-4" />
+                  Features
+                </a>
+              </div>
+            </div>
           </div>
         </footer>
 
