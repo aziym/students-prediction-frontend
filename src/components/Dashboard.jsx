@@ -52,43 +52,92 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'}`}>
 
-       {/* Enhanced Desktop Top Bar */}
+      {/* Enhanced Desktop Top Bar */}
       <div className="hidden md:block fixed top-0 right-0 left-72 z-20">
-        <div className={`h-16 ${isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'} backdrop-blur-xl border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'} px-6 flex items-center justify-between`}>
-          {/* Left side with time */}
-          <div className="flex items-center space-x-2">
-            <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              {new Date().toLocaleDateString('en-US', { 
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </div>
+        <div className={`relative h-16 ${isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'} backdrop-blur-xl border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
+          {/* Animated gradient background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 animate-gradient-x"></div>
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
           </div>
 
-          {/* Right side with theme toggle */}
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-2 rounded-xl ${isDarkMode ? 'bg-gray-700/50 hover:bg-gray-600/50' : 'bg-gray-100 hover:bg-gray-200'} 
-              transition-all duration-300 ease-in-out transform hover:scale-105
-              flex items-center gap-2 backdrop-blur-xl
-              ${isDarkMode ? 'shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'shadow-lg'}`}
-          >
-            {isDarkMode ? (
-              <>
-                <Sun className="w-5 h-5 text-amber-400" />
-                <span className="text-sm font-medium text-gray-300">Light</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-5 h-5 text-blue-600" />
-                <span className="text-sm font-medium text-gray-600">Dark</span>
-              </>
-            )}
-          </button>
+          {/* Content container */}
+          <div className="relative h-full px-6 flex items-center justify-between">
+            {/* Left side with time and welcome message */}
+            <div className="flex items-center space-x-6">
+              {/* Date display with icon */}
+              <div className={`flex items-center space-x-2 px-4 py-1.5 rounded-xl ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
+                <div className={`w-8 h-8 rounded-lg ${isDarkMode ? 'bg-gray-600' : 'bg-white'} flex items-center justify-center`}>
+                  <span className={`text-lg font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`}>
+                    {new Date().getDate()}
+                  </span>
+                </div>
+                <div className="flex flex-col">
+                  <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+                  </span>
+                  <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                    {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </span>
+                </div>
+              </div>
+
+              {/* Welcome message with gradient text */}
+              <div className="flex items-center space-x-2">
+                <div className="flex flex-col">
+                  <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Welcome to</span>
+                  <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                    TCPIPredict
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side with enhanced theme toggle */}
+            <div className="flex items-center space-x-4">
+              {/* Status indicator */}
+              <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-green-500/10 border border-green-500/20">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span className="text-xs font-medium text-green-500">System Active</span>
+              </div>
+
+              {/* Enhanced theme toggle button */}
+              <button
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className={`px-4 py-2 rounded-xl 
+                  ${isDarkMode ? 'bg-gray-700/50 hover:bg-gray-600/50' : 'bg-gray-100 hover:bg-gray-200'}
+                  transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg
+                  flex items-center gap-3 backdrop-blur-xl border
+                  ${isDarkMode ? 'border-gray-600/50 hover:border-gray-500/50' : 'border-gray-200 hover:border-gray-300'}
+                `}
+              >
+                <div className="relative w-8 h-8 flex items-center justify-center">
+                  {isDarkMode ? (
+                    <Sun className="w-5 h-5 text-amber-400 absolute transition-transform duration-300 rotate-0" />
+                  ) : (
+                    <Moon className="w-5 h-5 text-blue-600 absolute transition-transform duration-300 rotate-0" />
+                  )}
+                </div>
+                <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        @keyframes gradient-x {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-x {
+          background-size: 400% 400%;
+          animation: gradient-x 15s ease infinite;
+        }
+      `}</style>
 
       {/* Mobile Header */}
       <header className={`fixed top-0 left-0 right-0 z-20 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} md:hidden`}>
@@ -225,7 +274,7 @@ const DashboardLayout = ({ children }) => {
                   <div className="flex items-center gap-2">
                     <Bot className={`w-5 h-5 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`} />
                     <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                      Developed with ❤️ by
+                      Developed by
                     </span>
                     <a 
                       href="mailto:azim.bakri2002@gmail.com"
