@@ -65,7 +65,7 @@ const DashboardLayout = ({ children }) => {
           <div className="relative h-full px-6 flex items-center justify-between">
             {/* Left side with time and welcome message */}
             <div className="flex items-center space-x-6">
-              {/* Date display with icon */}
+              {/* Date display with icon Update data*/}
               <div className={`flex items-center space-x-2 px-4 py-1.5 rounded-xl ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
                 <div className={`w-8 h-8 rounded-lg ${isDarkMode ? 'bg-gray-600' : 'bg-white'} flex items-center justify-center`}>
                   <span className={`text-lg font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`}>
